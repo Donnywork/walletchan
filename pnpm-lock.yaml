@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@trezor/connect-common@10.0.1':
-    hash: uchodsl7c2czjyjyiueduypt6u
+    hash: e7b5b1b9614f04d888910dfe75a346290bc895ddbb22c93a766751b2f6919bd0
     path: patches/@trezor__connect-common@10.0.1.patch
 
 importers:
@@ -12523,7 +12523,7 @@ snapshots:
       '@tanstack/virtual-core': 3.17.6
       vue: 3.5.40(typescript@5.9.3)
 
-  '@trezor/connect-common@10.0.1(patch_hash=uchodsl7c2czjyjyiueduypt6u)(tslib@2.8.1)':
+  '@trezor/connect-common@10.0.1(patch_hash=e7b5b1b9614f04d888910dfe75a346290bc895ddbb22c93a766751b2f6919bd0)(tslib@2.8.1)':
     dependencies:
       '@trezor/crypto-utils': 10.0.1(tslib@2.8.1)
       '@trezor/device-utils': 10.0.1(tslib@2.8.1)
@@ -12536,7 +12536,7 @@ snapshots:
 
   '@trezor/connect-web@10.0.1(bufferutil@4.1.0)(tslib@2.8.1)(utf-8-validate@5.0.10)':
     dependencies:
-      '@trezor/connect-common': 10.0.1(patch_hash=uchodsl7c2czjyjyiueduypt6u)(tslib@2.8.1)
+      '@trezor/connect-common': 10.0.1(patch_hash=e7b5b1b9614f04d888910dfe75a346290bc895ddbb22c93a766751b2f6919bd0)(tslib@2.8.1)
       '@trezor/utils': 10.0.1(tslib@2.8.1)
       '@trezor/websocket-client': 10.0.1(bufferutil@4.1.0)(tslib@2.8.1)(utf-8-validate@5.0.10)
       tslib: 2.8.1

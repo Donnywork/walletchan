@@ -1,8 +1,9 @@
 FROM node:20-slim AS base
-RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+RUN corepack enable
 WORKDIR /app
 
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY patches/ patches/
 COPY apps/domain-reputation/ apps/domain-reputation/
 
 RUN pnpm install --frozen-lockfile --filter @walletchan/domain-reputation
