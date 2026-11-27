@@ -199,6 +199,8 @@ export function createBackgroundMessagePipeline(
 
     const trezorRoute = routes.routeBackgroundTrezorMessage(message, sendResponse);
     if (trezorRoute.handled) return trezorRoute.keepChannelOpen;
+    const localVaultRoute = routes.routeBackgroundLocalVaultMessage(message, sendResponse);
+    if (localVaultRoute.handled) return localVaultRoute.keepChannelOpen;
 
     const safeAccountRoute = routes.routeBackgroundSafeAccountMessage(
       message,

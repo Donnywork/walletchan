@@ -35,6 +35,8 @@ callers and lazy imports. It stays policy-free and preserves the default export.
 | `ConfirmationActions.tsx` | Confirm/reject arrangement and single-transaction simulation-warning projection. |
 | `StateScreens.tsx` | Force-inclusion progress and success animation. |
 | `CopyButton.tsx` | Inline clipboard feedback. |
+| `useLocalVaultSigning.ts` | LocalVault copy-paste state: prepare the request envelope, submit the pasted response, lock fees once prepared. |
+| `LocalVaultSigning.tsx` | LocalVault copy box, paste box, and Confirm / Send signed transaction action. |
 
 ## Boundaries and growth rules
 

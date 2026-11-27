@@ -72,7 +72,7 @@ export async function handleWalletSendCalls(
       !!account &&
       (getAccountTypeCapabilities(account.type).erc5792Batch ||
         isImpersonator);
-    if (!account || !supportsBatch) {
+    if (!account || !supportsBatch || account.type === "localVault") {
       await writeResultToStorage(`batchTxAck:${bundleId}`, {
         success: false,
         error: "Active account does not support batch transactions",

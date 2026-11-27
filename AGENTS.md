@@ -240,6 +240,7 @@ apps/extension/src/
 │   │   ├── accountStateRouter.ts # Non-secret account state/selection
 │   │   ├── accountManagementRouter.ts # Master-gated account/seed mutations
 │   │   ├── ledgerRouter.ts # Trusted-UI Ledger pairing/import transport
+│   │   ├── localVaultRouter.ts # Trusted-UI LocalVault account + copy-paste signing transport
 │   │   ├── secretManagementRouter.ts # Reveal and signing confirmation transport
 │   │   ├── batchRequestRouter.ts # ERC-5792 intake/status/decisions
 │   │   ├── delegationRouter.ts # EIP-7702 status/probe/set/revoke transport
@@ -378,6 +379,7 @@ apps/extension/src/
 │   │   ├── transactionBroadcast.ts # Sign-once raw-RPC effect boundary
 │   │   └── client.ts       # Viem client and bounded RPC transport
 │   ├── ledger/              # Ledger public metadata, offscreen bridge, and guarded signing
+│   ├── localVault/          # LocalVault copy-paste envelope, M1 policy, prepare/submit handlers
 │   ├── ensBrowsing/        # Untrusted ENS/GNS browsing audit domain (see README.md)
 │   │   ├── recipientHistory.ts # Read-only Send ENS address-update history
 │   │   ├── handlers.ts     # Stable message-entry facade

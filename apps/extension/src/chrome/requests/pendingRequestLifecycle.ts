@@ -39,7 +39,8 @@ export type PendingRequestLifecycleContext = {
     | "ledger"
     | "trezor"
     | "impersonator"
-    | "safe";
+    | "safe"
+    | "localVault";
   bankrCredentialTag?: string;
 };
 

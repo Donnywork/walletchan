@@ -133,7 +133,7 @@ import {
   type UnlockReturnTarget,
 } from "@/app/unlockRouting";
 import { SafeApprovalsSurface, SafeFeatureUnavailable, SafeHomeActivity, SafeHomeApprovalRail, SafeHomeQuickActions } from "@/app/SafeAppSurfaces";
-import { toLegacyAccountType } from "@/app/safeAccountType";
+import { toBatchAccountType, toLegacyAccountType } from "@/app/safeAccountType";
 import { HomeBackupReminder } from "@/app/home/HomeBackupReminder";
 import { PrivatePortfolioHome, useWalletHomeMode, WalletModeToggle } from "@/app/home";
 import type { UnshieldOperation } from "@/components/Shield/model/unshield";
@@ -2836,12 +2836,12 @@ function App() {
       selectedBatchRequest.accountAddress ??
       storedBatchAccount?.address ??
       (selectedBatchRequest.accountId ? "" : address);
-    const batchAccountType =
+    const batchAccountType = toBatchAccountType(
       selectedBatchRequest.accountType ??
       toLegacyAccountType(storedBatchAccount?.type) ??
       (selectedBatchRequest.accountId
         ? undefined
-        : toLegacyAccountType(activeAccount?.type));
+        : toLegacyAccountType(activeAccount?.type)));
     return (
       <Box bg="bg.base" h="100%" display="flex" flexDirection="column">
         <Box

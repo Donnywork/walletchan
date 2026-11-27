@@ -46,6 +46,8 @@ import {
 } from "@/components/ui";
 import type { Account } from "@/chrome/types";
 import { openHardwareSetupTab } from "@/app/hardwareSetupRoute";
+import { LocalVaultAccountSection } from "@/components/AddAccount/LocalVaultAccountSection";
+import { isValidLocalVaultAddress, submitLocalVaultAccount } from "@/components/AddAccount/localVaultAccount";
 
 interface AddAccountProps {
   onBack: () => void;
@@ -60,6 +62,7 @@ const accountTypeTitles: Record<AccountType, string> = {
   bankr: "Bankr API",
   impersonator: "View-only account",
   safe: "Safe",
+  localVault: "LocalVault",
 };
 
 function AddAccount({
@@ -78,6 +81,7 @@ function AddAccount({
   const [bankrApiKey, setBankrApiKey] = useState("");
   const [showBankrApiKey, setShowBankrApiKey] = useState(false);
   const [impersonatorAddress, setImpersonatorAddress] = useState("");
+  const [localVaultAddress, setLocalVaultAddress] = useState("");
   const [hasBankrAccount, setHasBankrAccount] = useState(false);
   const [seedGroups, setSeedGroups] = useState<SeedGroupSummary[]>([]);
   const [allAccounts, setAllAccounts] = useState<Account[]>([]);
@@ -95,6 +99,7 @@ function AddAccount({
     bankrAddress?: string;
     bankrApiKey?: string;
     impersonatorAddress?: string;
+    localVaultAddress?: string;
   }>({});
 
   // ENS/Basename/.wei/.gwei/.mega resolution for impersonator address
@@ -307,6 +312,15 @@ function AddAccount({
         });
 
         onAccountAdded(response.account);
+      } else if (accountType === "localVault") {
+        const response = await submitLocalVaultAccount(localVaultAddress, displayName);
+        if (!response.success || !response.account) {
+          setErrors({ localVaultAddress: response.error || "Failed to add account" });
+          setIsSubmitting(false);
+          return;
+        }
+        toast({ title: "Account added", description: "LocalVault account has been added", status: "success", duration: 2000 });
+        onAccountAdded(response.account);
       } else {
         // Bankr account
         if (!bankrApiKey.trim()) {
@@ -510,6 +524,11 @@ function AddAccount({
               onBackupChange={(isConfirmed) => setPrivateKeyBackup((current) => ({ ...current, isConfirmed }))}
               onBackupStateChange={handleGeneratedBackupStateChange}
             />
+          )}
+
+          {accountType === "localVault" && (
+            <LocalVaultAccountSection address={localVaultAddress} error={errors.localVaultAddress}
+              onAddressChange={(value) => { setLocalVaultAddress(value); setErrors((prev) => ({ ...prev, localVaultAddress: undefined })); }} />
           )}
 
           {accountType === "impersonator" && (
@@ -782,6 +801,7 @@ function AddAccount({
         }
         canAddBankr={!!bankrAddress.trim() && !!bankrApiKey.trim()}
         canAddImpersonator={impersonatorIsValid && !impersonatorIsResolving}
+        canAddLocalVault={isValidLocalVaultAddress(localVaultAddress)}
         onAddAccount={handleSubmit}
       />
     </AppScreen>

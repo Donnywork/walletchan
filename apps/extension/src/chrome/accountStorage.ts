@@ -37,6 +37,7 @@ export {
 } from "./accounts/bankrStorage";
 export {
   addImpersonatorAccount,
+  addLocalVaultAccount,
   addPrivateKeyAccount,
   clearAllAccounts,
   removeAccount,

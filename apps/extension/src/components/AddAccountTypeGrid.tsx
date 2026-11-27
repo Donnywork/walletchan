@@ -23,7 +23,8 @@ export type AccountType =
   | "ledger"
   | "trezor"
   | "impersonator"
-  | "safe";
+  | "safe"
+  | "localVault";
 
 interface AddAccountTypeGridProps {
   hasBankrAccount: boolean;
@@ -51,6 +52,13 @@ const accountTypes = [
     icon: EyeIcon,
     iconBg: "status.success.bg",
     iconColor: "status.success.fg",
+  },
+  {
+    type: "localVault" as const,
+    title: "LocalVault",
+    icon: KeyIcon,
+    iconBg: "surface.sunken",
+    iconColor: "fg.primary",
   },
   {
     type: "ledger" as const,

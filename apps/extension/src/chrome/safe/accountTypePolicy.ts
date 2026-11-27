@@ -50,6 +50,11 @@ export const SAFE_ACCOUNT_TYPE_POLICY = {
     executionSigningPath: null,
     feeTokenExecution: false,
   },
+  localVault: {
+    ownerSigningPath: null,
+    executionSigningPath: null,
+    feeTokenExecution: false,
+  },
 } as const satisfies Record<AccountType, SafeAccountTypePolicy>;
 
 type AccountTypesWith<

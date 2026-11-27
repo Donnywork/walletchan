@@ -48,6 +48,7 @@ export const WALLET_UI_MESSAGE_TYPES = [
   "confirmTransactionAsyncLedger",
   "confirmTransactionAsyncTrezor",
   "confirmImpersonatedTransaction",
+  "prepareLocalVaultTransaction", "submitLocalVaultResponse",
   "getTransactionNonce",
   "prepareTransactionReplacement",
   "getFeePaymentOptions",
@@ -84,7 +85,7 @@ export const WALLET_UI_MESSAGE_TYPES = [
 
   // Account and seed phrase management
   "addBankrAccount",
-  "addImpersonatorAccount",
+  "addImpersonatorAccount", "addLocalVaultAccount",
   "addSeedPhraseGroup",
   "previewSeedAddresses",
   "deriveSeedAccount",

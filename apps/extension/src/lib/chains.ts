@@ -18,7 +18,8 @@ export type ChainAccountType =
   | "ledger"
   | "trezor"
   | "impersonator"
-  | "safe";
+  | "safe"
+  | "localVault";
 
 export interface ResolvedChain {
   name: string;

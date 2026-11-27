@@ -26,6 +26,13 @@ For any tx-confirmation surface:
 4. Send the gas estimates / overrides through to the background handler that signs the tx.
 5. Make sure the background handler actually applies them at sign time (clears legacy `gasPrice`, sets `maxFeePerGas` / `maxPriorityFeePerGas` / `gas` from the override).
 
+**LocalVault (single-transaction only):** `GasEstimateDisplay` treats
+`localVault` like a local account, so the tier picker and `onGasOverrides` run
+as usual. The overrides are applied when the unsigned request is prepared
+(`prepareLocalVaultTransaction`), not at sign time, and the fee controls lock
+once the request exists. LocalVault never reaches the batch, cross-dapp or
+swap/bridge surfaces.
+
 **Bankr / impersonator paths are exempt:** Bankr handles gas server-side; impersonator can't broadcast. The gas component handles these gracefully (picker auto-hides), but the parent should still set `isNonAtomic` correctly so the picker only fires its callbacks for PK / Seed.
 
 ## Atomic-7702 wiring (PK / Seed batch surfaces)

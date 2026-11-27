@@ -13,6 +13,7 @@ interface AddAccountActionBarProps {
   onPrivateKeyBackupChange: (isConfirmed: boolean) => void;
   canAddBankr: boolean;
   canAddImpersonator: boolean;
+  canAddLocalVault: boolean;
   onAddAccount: () => void;
 }
 
@@ -26,6 +27,7 @@ export function AddAccountActionBar({
   onPrivateKeyBackupChange,
   canAddBankr,
   canAddImpersonator,
+  canAddLocalVault,
   onAddAccount,
 }: AddAccountActionBarProps) {
   const isLocalAccount =
@@ -59,7 +61,8 @@ export function AddAccountActionBar({
           isDisabled={
             (accountType === "privateKey" && !canAddPrivateKey) ||
             (accountType === "bankr" && !canAddBankr) ||
-            (accountType === "impersonator" && !canAddImpersonator)
+            (accountType === "impersonator" && !canAddImpersonator) ||
+            (accountType === "localVault" && !canAddLocalVault)
           }
         >
           Add account

@@ -10,7 +10,8 @@ export type SwapAccountType =
   | "ledger"
   | "trezor"
   | "impersonator"
-  | "safe";
+  | "safe"
+  | "localVault";
 
 export type PreparedSwapTxEntry = Omit<SwapTxEntry, "tx"> & {
   tx: Omit<SwapTxEntry["tx"], "to" | "data" | "value"> & {

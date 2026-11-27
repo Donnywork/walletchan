@@ -51,6 +51,8 @@ Review order:
 7. `accountStateRouter.ts`, `contactBookRouter.ts`, `accountManagementRouter.ts`,
    `ledgerRouter.ts` — non-secret account/contact state plus master-gated
    account/seed/Ledger mutation and hardware discovery transport.
+   `localVaultRouter.ts` owns master-gated LocalVault account creation and the
+   LocalVault prepare/submit copy-paste signing calls.
 8. `secretManagementRouter.ts` — trusted-sender plaintext release and pinned
    signature/delegated-permission confirmation transport.
 9. `batchRequestRouter.ts`, `delegationRouter.ts`,

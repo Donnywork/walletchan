@@ -6,6 +6,9 @@
   `SeedPhraseSetup` directly; Back returns to this combined chooser.
 - `AddAccountActionBar.tsx` owns actions for non-seed setup paths. Seed setup
   owns its own actions; the legacy biometric seed gate has no mutation button.
+- `LocalVaultAccountSection.tsx` presents the LocalVault address field;
+  `localVaultAccount.ts` validates it (EIP-55 when mixed case) and sends the
+  master-gated `addLocalVaultAccount` message (`background/localVaultRouter.ts`). Only the address is stored.
 - `PrivateKeyAccountSection.tsx` connects private-key entry to the externally
   placed backup acknowledgment without owning persistence.
 - `SeedPhraseAccountSection.tsx` presents saved seed groups and delegates

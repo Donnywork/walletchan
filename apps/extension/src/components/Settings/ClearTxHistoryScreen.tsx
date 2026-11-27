@@ -51,6 +51,8 @@ function accountTypeLabel(account: Account): string {
       return "View-Only";
     case "safe":
       return "Safe";
+    case "localVault":
+      return "LocalVault";
   }
 }
 

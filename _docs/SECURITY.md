@@ -213,6 +213,7 @@ The agent password model restricts what operations are available when the wallet
 | Add Bankr account (with API key) | Yes    | **BLOCKED** | `background/accountManagementRouter.ts` + `auth/bankrCredentialUpdate.ts`      |
 | Add private key account          | Yes    | **BLOCKED** | `background/accountManagementRouter.ts` + the private-key vault boundary       |
 | Add impersonator account         | Yes    | **BLOCKED** | `background/accountManagementRouter.ts`                                        |
+| Add LocalVault account           | Yes    | **BLOCKED** | `background/localVaultRouter.ts` → `localVault/accountHandlers.ts` (public address only) |
 | Create onboarding seed account   | Yes    | **BLOCKED** | `onboarding/seedAccount.ts` requires the live marker owner and zero accounts; seed persistence rechecks live master authorization and marks deferred backup |
 | Confirm seed backup              | Yes    | **BLOCKED** | `mnemonic/backup.ts` clears only group reminder metadata under master/operation/storage locks; no secret response |
 | Add seed phrase group            | Yes    | **BLOCKED** | `background/accountManagementRouter.ts` → `mnemonic/accountHandlers.ts`        |
@@ -1656,6 +1657,7 @@ accessible resources.
 | `sessionStartedAt`         | No               | Session timestamp (milliseconds since epoch)                     |
 | `autoLockNever`            | No               | Outer consistency marker; authenticated passkey timing remains authoritative |
 | `passwordType`             | No               | `"master" \| "agent"` - which password was used to unlock. Restored to maintain agent password access control guards after service worker restart (v1.3.0+) |
+| `localVaultRequest:{txId}` | No               | Prepared unsigned LocalVault request (public transaction fields and request id). The submit handler accepts only a response that matches it and recovers to the pinned account address |
 | `privacyPortfolioViewV1`   | No signing secret | Deployment-bound, strictly validated aggregate ready/pending/recoverable balances and at most 193 already-released USD chart points. It intentionally survives automatic auth expiry for read-only Private mode, but explicit lock/reset/recovery replacement and browser shutdown clear it. It contains no commitments, note linkage, depositor, proof, key, phrase, or signing authority. |
 
 ### chrome.storage.sync (synced, no secrets)

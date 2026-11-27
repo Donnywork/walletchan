@@ -5,6 +5,7 @@ import { composeAdvancedRoutes } from "./advancedRoutes";
 import { composeDataRoutes } from "./dataRoutes";
 import { composeExecutionRoutes } from "./executionRoutes";
 import { composeIdentityRoutes } from "./identityRoutes";
+import { composeLocalVaultRoutes } from "./localVaultRoutes";
 import { createPendingResolutionComposition } from "./pendingResolution";
 import { createProviderContextComposition } from "./providerContext";
 import { composeProviderRoutes } from "./providerRoutes";
@@ -18,6 +19,7 @@ export function composeBackgroundRoutes() {
     ...composeAccountRoutes(pending),
     ...composeProviderRoutes(pending, provider),
     ...composeExecutionRoutes(pending),
+    ...composeLocalVaultRoutes(pending),
     ...composeAdvancedRoutes(pending),
     ...composeDataRoutes(pending),
     rejectExternalProviderRequest: provider.rejectExternalProviderRequest,

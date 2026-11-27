@@ -26,6 +26,8 @@ import { useTransactionReviewState } from "./useTransactionReviewState";
 import { replacementGasSelectionError } from "@/lib/transactionReplacement";
 import { createTransactionApprovalCleanup } from "./approvalCleanupAdapter";
 import { useImpersonatedTransactionCapability } from "./useImpersonatedTransactionCapability";
+import { LocalVaultActionNotice, LocalVaultConfirmAction } from "./LocalVaultSigning";
+import { useLocalVaultSigning } from "./useLocalVaultSigning";
 
 function TransactionConfirmation({
   txRequest,
@@ -123,6 +125,11 @@ function TransactionConfirmation({
       transactionNonce.retry(); setFeePaymentQuote(null);
     },
   });
+  const isLocalVault = accountType === "localVault";
+  const localVault = useLocalVaultSigning({
+    enabled: isLocalVault, txRequest, gasOverrides: review.gasOverrides,
+    onSent: isInSidePanel ? onConfirmed : undefined,
+  });
   const isLedgerWaiting = (accountType === "ledger" || accountType === "trezor") && actions.state === "submitting";
   const replacementGasError = replacementGasSelectionError(
     replacement,
@@ -140,7 +147,7 @@ function TransactionConfirmation({
       />
     );
   }
-  if (actions.state === "sent") return <TransactionSentScreen />;
+  if (actions.state === "sent" || localVault.sent) return <TransactionSentScreen />;
 
   const screenTitle = replacement
     ? replacement.kind === "cancel"
@@ -209,7 +216,7 @@ function TransactionConfirmation({
     <RejectActionButton
       state={actions.state}
       isRejecting={actions.isRejecting}
-      isDisabled={actions.isRetrying}
+      isDisabled={actions.isRetrying || localVault.busy !== null}
       onReject={actions.handleReject}
     />
   );
@@ -247,7 +254,7 @@ function TransactionConfirmation({
             stripFg={stripFg}
             onNavigate={onNavigate}
             onRejectAll={onRejectAll}
-            isDisabled={isLedgerWaiting || actions.isRetrying}
+            isDisabled={isLedgerWaiting || actions.isRetrying || localVault.busy !== null}
           />
         ) : undefined
       }
@@ -328,7 +335,7 @@ function TransactionConfirmation({
           onFunctionName={setDecodedFunctionName}
           onAddToBatch={actions.handleAddToBatch}
           onForceInclusionChange={review.setForceInclusion}
-          isReadOnly={actions.state === "submitting" || actions.isRejecting || actions.isRetrying}
+          isReadOnly={actions.state === "submitting" || actions.isRejecting || actions.isRetrying || localVault.locked}
           feePaymentToken={feePaymentToken}
           feePaymentQuote={feePaymentQuote}
           showTransactionNonce={usesEditableNonce}
@@ -355,17 +362,21 @@ function TransactionConfirmation({
           replacementGasError={review.gasOverrides ? replacementGasError : null}
           onGasOverrides={review.setGasOverrides}
           onGasValidityChange={review.setGasValid}
-          isReadOnly={actions.state === "submitting" || actions.isRejecting || actions.isRetrying}
+          isReadOnly={actions.state === "submitting" || actions.isRejecting || actions.isRetrying || localVault.locked}
           feePaymentToken={feePaymentToken}
           feePaymentQuote={feePaymentQuote}
           onFeePaymentTokenChange={setFeePaymentToken}
           onFeePaymentQuoteChange={setFeePaymentQuote}
         />
       }
-      actionNotice={(actions.error || review.simulationUnavailable || accountType === "impersonator" || isLedgerWaiting) ?
+      actionNotice={isLocalVault ? <LocalVaultActionNotice signing={localVault}>{review.simulationUnavailable &&
+        <TransactionActionNotice actions={actions} accountType={accountType} simulationUnavailable canSendImpersonatedTransaction={false} hardwareWaiting={false} />}</LocalVaultActionNotice> :
+        (actions.error || review.simulationUnavailable || accountType === "impersonator" || isLedgerWaiting) ?
         <TransactionActionNotice actions={actions} accountType={accountType} simulationUnavailable={review.simulationUnavailable}
           canSendImpersonatedTransaction={canSendImpersonatedTransaction} hardwareWaiting={isLedgerWaiting} /> : undefined}
-      confirmAction={<TransactionPrimaryAction actions={actions} accountType={accountType}
+      confirmAction={isLocalVault ? <LocalVaultConfirmAction signing={localVault} disabledReason={confirmDisabledReason}
+        reviewLoading={reviewLoading} simulationReverted={review.simulationReverted} /> :
+        <TransactionPrimaryAction actions={actions} accountType={accountType}
         canSendImpersonatedTransaction={canSendImpersonatedTransaction} rejectButton={rejectButton}
         disabledReason={confirmDisabledReason} simulationReverted={review.simulationReverted}
         reviewLoading={reviewLoading} waitingForLedger={isLedgerWaiting} replacement={replacement} />}

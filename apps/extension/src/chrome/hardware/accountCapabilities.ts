@@ -202,6 +202,31 @@ export const ACCOUNT_TYPE_CAPABILITIES = {
     customNonce: false,
     agentPasswordSigning: false,
   },
+  // M1: only plain Sepolia ETH transfers, through the dedicated copy-paste
+  // confirmation route. Every shared feature stays off.
+  localVault: {
+    signingTransport: "none",
+    customEvmChains: false,
+    personalSign: false,
+    typedDataSign: false,
+    rawEthSign: false,
+    erc5792Batch: false,
+    crossDappBatch: false,
+    eip7702: false,
+    erc7715: false,
+    feeTokenExecution: false,
+    sponsoredTransfer: false,
+    forceInclusion: false,
+    directSwap: false,
+    safeOwner: false,
+    safeNativeExecution: false,
+    privacyPoolsSingleTransaction: false,
+    privacyPoolsMultiExit: false,
+    approvalCleanupMutation: false,
+    transactionReplacement: false,
+    customNonce: false,
+    agentPasswordSigning: false,
+  },
 } as const satisfies Record<AccountType, AccountTypeCapabilities>;
 
 export function getAccountTypeCapabilities(

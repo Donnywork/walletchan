@@ -25,7 +25,8 @@ export function SponsorshipEligibilityNotice({
     accountType === "impersonator" ||
     accountType === "ledger" ||
     accountType === "trezor" ||
-    accountType === "safe"
+    accountType === "safe" ||
+    accountType === "localVault"
   ) {
     return null;
   }
@@ -88,7 +89,8 @@ export function TransferNotices({
         accountType !== "impersonator" &&
         accountType !== "ledger" &&
         accountType !== "trezor" &&
-        accountType !== "safe" && (
+        accountType !== "safe" &&
+        accountType !== "localVault" && (
           <Box
             bg="status.success.bg"
             borderWidth="1px"
@@ -150,6 +152,20 @@ export function TransferNotices({
           <Text fontSize="sm" color="accentFg.highlight" fontWeight="700">
             View-only account — you can review this transfer. Sending is only
             available when developer mode is enabled for the selected RPC.
+          </Text>
+        </Box>
+      )}
+      {accountType === "localVault" && (
+        <Box
+          bg="accent.highlight"
+          border={tokens.borders.thin}
+          borderColor="border.subtle"
+          borderRadius="lg"
+          p={3}
+        >
+          <Text fontSize="sm" color="accentFg.highlight" fontWeight="700">
+            LocalVault account — you sign in LocalVault by copy and paste.
+            Only ETH transfers on Sepolia are supported for now.
           </Text>
         </Box>
       )}

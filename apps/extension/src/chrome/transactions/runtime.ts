@@ -45,7 +45,7 @@ export const activeAbortControllers = new Map<string, AbortController>();
 export async function resolvePinnedAccount(
   pending: { accountId?: string; accountAddress?: string },
 ): Promise<
-  | { ok: true; account: Exclude<Account, { type: "impersonator" }> }
+  | { ok: true; account: Exclude<Account, { type: "impersonator" | "localVault" }> }
   | { ok: false; error: string }
 > {
   if (!pending.accountId) {

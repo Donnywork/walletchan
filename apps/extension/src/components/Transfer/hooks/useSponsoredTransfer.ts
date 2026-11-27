@@ -128,7 +128,8 @@ export function useSponsoredTransfer({
       accountType === "impersonator" ||
       accountType === "ledger" ||
       accountType === "trezor" ||
-      accountType === "safe"
+      accountType === "safe" ||
+      accountType === "localVault"
     ) return;
     const key = `${fromAddress.toLowerCase()}:8453:usdc`;
     if (statusCheckedRef.current === key) return;

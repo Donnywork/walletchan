@@ -21,6 +21,7 @@ const accountTypes: AccountType[] = [
   "trezor",
   "impersonator",
   "safe",
+  "localVault",
 ];
 
 function account(type: AccountType): Account {
@@ -79,6 +80,7 @@ test("the policy routes existing Safe signers through their central signing path
   assert.equal(getSafeOwnerSigningPath(account("ledger")), "ledger");
   assert.equal(getSafeOwnerSigningPath(account("trezor")), "trezor");
   assert.equal(getSafeOwnerSigningPath(account("impersonator")), null);
+  assert.equal(getSafeOwnerSigningPath(account("localVault")), null);
   assert.equal(getSafeOwnerSigningPath(account("safe")), null);
 
   assert.equal(getSafeExecutionSigningPath(account("privateKey")), "local");

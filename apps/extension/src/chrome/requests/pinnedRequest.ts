@@ -69,7 +69,8 @@ export function pinnedSignatureRequest(
 }
 
 export function pinnedBatchTxRequest(
-  account: ProviderRequestAccount,
+  // Batch intake rejects LocalVault (no erc5792Batch capability) before this.
+  account: Exclude<ProviderRequestAccount, { type: "localVault" }>,
   base: BatchBase,
 ): PinnedBatchTxRequest {
   return {

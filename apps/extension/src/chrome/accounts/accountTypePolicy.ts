@@ -21,6 +21,8 @@ export const ACCOUNT_TYPE_CAPABILITIES = {
   trezor: { directSigner: true, forceInclusion: false, forceInclusionBatch: false },
   impersonator: { directSigner: false, forceInclusion: false, forceInclusionBatch: false },
   safe: { directSigner: false, forceInclusion: false, forceInclusionBatch: false },
+  // Signs outside WalletChan through its own copy-paste confirmation route.
+  localVault: { directSigner: false, forceInclusion: false, forceInclusionBatch: false },
 } as const satisfies Record<AccountType, AccountTypeCapabilities>;
 
 export type DirectSigningAccountType = {

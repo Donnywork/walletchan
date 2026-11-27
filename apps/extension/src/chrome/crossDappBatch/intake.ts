@@ -41,6 +41,9 @@ export async function handleAddToCrossDappBatch(
   if (pending.replacement) {
     return { success: false, error: "Replacement transactions cannot be batched" };
   }
+  if (pending.accountType === "localVault") {
+    return { success: false, error: "This account type cannot use cross-dapp batching" };
+  }
   if (!hasConcreteRecipientAddress(pending.tx.to)) {
     return {
       success: false,

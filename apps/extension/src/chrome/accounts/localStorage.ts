@@ -1,6 +1,10 @@
-/** Private-key and view-only account metadata mutations. */
+/** Private-key, view-only and LocalVault account metadata mutations. */
 
-import type { ImpersonatorAccount, PrivateKeyAccount } from "../types";
+import type {
+  ImpersonatorAccount,
+  LocalVaultAccount,
+  PrivateKeyAccount,
+} from "../types";
 import { withStorageLock } from "../storageLock";
 import {
   ACCOUNTS_LOCK_KEY,
@@ -72,6 +76,38 @@ export async function addImpersonatorAccount(
       id: crypto.randomUUID(),
       type: "impersonator",
       address: normalizeEvmAccountAddress(address),
+      displayName,
+      createdAt: Date.now(),
+    };
+    accounts.push(account);
+    assertAccountStorageAuthorized(expectedAuthEpoch);
+    await saveAccounts(accounts);
+    return account;
+  });
+  await setActiveAccountId(newAccount.id, expectedAuthEpoch).catch((error) => {
+    console.warn("[accountStorage] Failed to select newly added account:", error);
+  });
+  return newAccount;
+}
+
+/**
+ * A LocalVault account stores only the public address of a key held by the
+ * separate LocalVault program. It is a signer for address-uniqueness purposes.
+ */
+export async function addLocalVaultAccount(
+  address: string,
+  displayName?: string,
+  expectedAuthEpoch?: string,
+): Promise<LocalVaultAccount> {
+  const newAccount = await withStorageLock(ACCOUNTS_LOCK_KEY, async () => {
+    const accounts = await getAccounts();
+    assertAccountStorageAuthorized(expectedAuthEpoch);
+    const normalizedAddress = normalizeEvmAccountAddress(address);
+    assertUniqueSignerAddress(accounts, normalizedAddress);
+    const account: LocalVaultAccount = {
+      id: crypto.randomUUID(),
+      type: "localVault",
+      address: normalizedAddress,
       displayName,
       createdAt: Date.now(),
     };

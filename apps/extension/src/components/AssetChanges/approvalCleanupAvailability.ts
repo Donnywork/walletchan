@@ -7,7 +7,8 @@ export type ApprovalCleanupAccountType =
   | "seedPhrase"
   | "ledger"
   | "trezor"
-  | "impersonator";
+  | "impersonator"
+  | "localVault";
 
 export function getApprovalCleanupDisabledReason(input: {
   accountType?: ApprovalCleanupAccountType;
@@ -34,6 +35,9 @@ export function getApprovalCleanupDisabledReason(input: {
   }
   if (input.accountType === "impersonator") {
     return "View-only accounts cannot add calls.";
+  }
+  if (input.accountType === "localVault") {
+    return "LocalVault accounts cannot add calls.";
   }
   return input.batchStrategy === "atomic-7702"
     ? null

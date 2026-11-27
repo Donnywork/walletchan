@@ -10,7 +10,8 @@ export type AccountType =
   | "ledger"
   | "trezor"
   | "impersonator"
-  | "safe";
+  | "safe"
+  | "localVault";
 
 /**
  * Password type for unlock sessions
@@ -72,6 +73,15 @@ export interface ImpersonatorAccount extends BaseAccount {
 }
 
 /**
+ * LocalVault keeps the private key in a separate local program. WalletChan
+ * stores only the public address and moves request/response envelopes by
+ * copy-paste. Not a direct signer: shared signing paths never reach it.
+ */
+export interface LocalVaultAccount extends BaseAccount {
+  type: "localVault";
+}
+
+/**
  * A Safe account has no WalletChan-owned secret. Current owner capabilities
  * and chain-specific authority live in the Safe domain and are revalidated
  * before every approval or execution effect.
@@ -87,7 +97,8 @@ export type Account =
   | LedgerAccount
   | TrezorAccount
   | ImpersonatorAccount
-  | SafeAccount;
+  | SafeAccount
+  | LocalVaultAccount;
 
 /**
  * Seed group metadata (stored alongside accounts)

@@ -7,7 +7,8 @@ export type TransactionAccountType =
   | "seedPhrase"
   | "ledger"
   | "trezor"
-  | "impersonator";
+  | "impersonator"
+  | "localVault";
 
 export interface TransactionConfirmationProps {
   txRequest: PendingTxRequest;

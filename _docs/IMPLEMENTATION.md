@@ -1203,6 +1203,42 @@ Wallet-UI messages `ledgerConnect`, `ledgerScan`, `ledgerCancel`,
 `confirmTransactionAsyncLedger`; Ledger signatures branch inside the existing
 trusted `confirmSignatureRequest` route.
 
+### LocalVault Architecture
+
+A `localVault` account stores only the public address of a key held by the
+separate LocalVault program (envelope spec: LocalVault `docs/ENVELOPE.md`).
+It is **not** a direct signer (`directSigner: false`) and every row in
+`hardware/accountCapabilities.ts` and `safe/accountTypePolicy.ts` is off, so
+shared signature, batch, WalletConnect-signature, Safe, swap, sponsored and
+fee-token paths reject it exactly like a view-only account. Message-signature
+prompts are reject-only.
+
+Its only effect path is the single-transaction confirmation screen, limited by
+`localVault/policy.ts` to plain ETH transfers on Sepolia (no calldata, no
+replacement, no 7702/7715/privacy/split metadata). It applies to both the Send
+screen and dapp `eth_sendTransaction`:
+
+1. `prepareLocalVaultTransaction` (trusted UI) builds the unsigned EIP-1559
+   transaction with the pending nonce and the reviewed gas overrides, stores it
+   in `chrome.storage.session` under `localVaultRequest:{txId}` (no secret), and
+   returns the `signTransaction` request envelope for the user to copy.
+2. `submitLocalVaultResponse` (trusted UI, via `runPendingRequestResolution`)
+   strictly parses the pasted response, requires its `id` to match, verifies
+   canonical type-0x02 bytes whose unsigned part equals the stored request,
+   a low-S signature recovering to the account address, and the hash
+   (`localVault/envelope.ts`). It then re-checks RPC chain ID and pending
+   nonce and re-runs pending-request authorization before removing the
+   pending row, writing history, and broadcasting the exact bytes through
+   `broadcastSerializedTransaction`.
+
+All three wallet-UI messages (`addLocalVaultAccount`, which is master-gated in
+`localVault/accountHandlers.ts`, plus the two above) are owned by
+`background/localVaultRouter.ts`, composed in
+`background/composition/localVaultRoutes.ts`.
+Because it is not a direct signer, its address is not part of the external
+V3/V4 typed-data `verifyingContract` protection in M1
+(`signatures/externalTypedData.ts`).
+
 ### Trezor Architecture
 
 - **Browser and dependency boundary:** Trezor is Chromium-only. Exact-pinned
