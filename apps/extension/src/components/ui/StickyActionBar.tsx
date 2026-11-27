@@ -7,12 +7,13 @@ export interface StickyActionBarProps extends BoxProps {
   summary?: ReactNode;
   notice?: ReactNode;
   summaryGap?: BoxProps["marginBottom"];
+  wrapActionLabels?: boolean;
 }
 
 /** Non-scrolling bottom action region for one primary or a secondary/primary pair. */
 export const StickyActionBar = forwardRef<HTMLDivElement, StickyActionBarProps>(
   function StickyActionBar(
-    { primaryAction, secondaryAction, summary, notice, summaryGap = 3, ...rest },
+    { primaryAction, secondaryAction, summary, notice, summaryGap = 3, wrapActionLabels, ...rest },
     ref,
   ) {
     return (
@@ -43,9 +44,13 @@ export const StickyActionBar = forwardRef<HTMLDivElement, StickyActionBarProps>(
           </Box>
         )}
         <Grid
+          autoRows={wrapActionLabels ? "1fr" : undefined}
+          sx={wrapActionLabels ? {
+            "& > div > button": { h: "100%", minH: "44px", py: 2, whiteSpace: "normal" },
+          } : undefined}
           templateColumns={
             secondaryAction
-              ? "repeat(auto-fit, minmax(min(128px, 100%), 1fr))"
+              ? `repeat(auto-fit, minmax(min(${wrapActionLabels ? "8rem" : "128px"}, 100%), 1fr))`
               : "minmax(0, 1fr)"
           }
           gap={3}

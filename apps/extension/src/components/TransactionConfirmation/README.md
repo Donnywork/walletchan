@@ -36,7 +36,7 @@ callers and lazy imports. It stays policy-free and preserves the default export.
 | `StateScreens.tsx` | Force-inclusion progress and success animation. |
 | `CopyButton.tsx` | Inline clipboard feedback. |
 | `useLocalVaultSigning.ts` | LocalVault copy-paste state: prepare the request envelope, submit the pasted response, lock fees once prepared. |
-| `LocalVaultSigning.tsx` | LocalVault copy box, paste box, and Confirm / Send signed transaction action. |
+| `LocalVaultSigning.tsx` | LocalVault copy and paste fields in the scrolling review body, with focus on the request when prepared. Only the decision buttons are pinned. |
 
 ## Boundaries and growth rules
 
@@ -65,6 +65,8 @@ callers and lazy imports. It stays policy-free and preserves the default export.
   creating one all-purpose controller.
 
 Pure value projection is covered by `tests/ui/transactionValue.test.ts`.
+Run `node scripts/localvault-signing-layout-qa.mjs` from the extension directory
+against the preview server to check button padding and wrapping in compact LocalVault reviews.
 Transaction intake, confirmation, first-action-wins, and all wallet-type paths
 remain covered under `tests/transactions/`, `tests/requests/`, and packaged
 extension signing QA.

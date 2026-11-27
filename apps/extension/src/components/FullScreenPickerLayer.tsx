@@ -19,15 +19,12 @@ export function FullScreenPickerLayer({
       document.getElementById("preview-root");
     if (!appRoot) return;
 
-    const previousAriaHidden = appRoot.getAttribute("aria-hidden");
-    const wasInert = appRoot.hasAttribute("inert");
-    appRoot.setAttribute("aria-hidden", "true");
-    appRoot.setAttribute("inert", "");
+    // Native inert also removes the covered screen from the accessibility tree.
+    const wasInert = appRoot.inert;
+    appRoot.inert = true;
 
     return () => {
-      if (previousAriaHidden === null) appRoot.removeAttribute("aria-hidden");
-      else appRoot.setAttribute("aria-hidden", previousAriaHidden);
-      if (!wasInert) appRoot.removeAttribute("inert");
+      if (!wasInert) appRoot.inert = false;
     };
   }, []);
 

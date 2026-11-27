@@ -35,6 +35,8 @@ export interface ConfirmationScreenProps
   advancedLabel?: string;
   actionSummary?: ReactNode;
   actionNotice?: ReactNode;
+  actionDetailsPlacement?: "footer" | "body";
+  wrapActionLabels?: boolean;
   confirmAction?: ReactNode;
   rejectAction?: ReactNode;
 }
@@ -67,6 +69,8 @@ export const ConfirmationScreen = forwardRef<
     advancedLabel = "Advanced details",
     actionSummary,
     actionNotice,
+    actionDetailsPlacement = "footer",
+    wrapActionLabels,
     confirmAction,
     rejectAction,
     ...screenProps
@@ -107,13 +111,18 @@ export const ConfirmationScreen = forwardRef<
               {advancedDetails}
             </Box>
           )}
+
+          {actionDetailsPlacement === "body" && actionSummary}
+          {actionDetailsPlacement === "body" && actionNotice}
         </VStack>
       </ScreenBody>
 
       {confirmAction && (
         <StickyActionBar
-          summary={actionSummary}
-          notice={actionNotice}
+          wrapActionLabels={wrapActionLabels}
+          borderTopRadius={actionDetailsPlacement === "body" ? "xl" : undefined}
+          summary={actionDetailsPlacement === "footer" && actionSummary}
+          notice={actionDetailsPlacement === "footer" && actionNotice}
           primaryAction={confirmAction}
           secondaryAction={rejectAction}
         />

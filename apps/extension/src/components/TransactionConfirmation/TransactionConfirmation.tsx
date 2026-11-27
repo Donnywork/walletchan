@@ -224,6 +224,8 @@ function TransactionConfirmation({
   return (
     <ConfirmationScreen
       title={screenTitle}
+      actionDetailsPlacement={isLocalVault ? "body" : "footer"}
+      wrapActionLabels={!!localVault.envelope}
       onBack={onBack}
       trailing={
         <CopyButton

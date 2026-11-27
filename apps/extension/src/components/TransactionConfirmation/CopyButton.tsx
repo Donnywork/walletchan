@@ -43,7 +43,7 @@ export function CopyButton({ value, light, label }: CopyButtonProps) {
   );
 
   return label ? (
-    <Tooltip label={label} fontSize="xs" hasArrow>
+    <Tooltip label={label} fontSize="xs">
       {button}
     </Tooltip>
   ) : (

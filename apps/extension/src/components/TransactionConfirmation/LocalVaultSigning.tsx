@@ -3,8 +3,8 @@
  * confirmation screen: the copy box, the paste box and the action button.
  * State lives in `useLocalVaultSigning`.
  */
-import type { ReactNode } from "react";
-import { Button, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
+import { useEffect, useRef, type ReactNode } from "react";
+import { Button, Heading, HStack, Text, Textarea, VStack } from "@chakra-ui/react";
 import { ViewOnlySigningNotice } from "@/components/shared/ViewOnlySigningNotice";
 import { shouldConfirmSimulationFailure } from "@/components/RequestConfirmation/simulationFailure";
 import { useTheme } from "@/theme";
@@ -12,17 +12,32 @@ import { ConfirmActionButton } from "./ConfirmationActions";
 import { CopyButton } from "./CopyButton";
 import type { LocalVaultSigning } from "./useLocalVaultSigning";
 
+const stepHeadingProps = {
+  as: "h2",
+  fontFamily: "body",
+  fontSize: "sm",
+  fontWeight: "semibold",
+  lineHeight: "short",
+} as const;
+
 /** `children` carries the shared review notices (e.g. asset preview unavailable). */
 export function LocalVaultActionNotice({ signing, children }: { signing: LocalVaultSigning; children?: ReactNode }) {
   const { tokens } = useTheme();
+  const requestHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (signing.envelope) {
+      requestHeading.current?.focus({ preventScroll: true });
+      requestHeading.current?.scrollIntoView({ block: "start" });
+    }
+  }, [signing.envelope]);
   if (signing.unsupportedReason) {
     return <ViewOnlySigningNotice message={signing.unsupportedReason} />;
   }
   const fieldProps = {
-    fontFamily: "mono",
-    fontSize: "xs",
+    fontFamily: "body",
+    fontSize: "sm",
     resize: "vertical" as const,
-    bg: "surface.raised",
+    bg: "surface.sunken",
     color: "fg.primary",
     border: tokens.borders.thin,
     borderColor: "border.default",
@@ -30,7 +45,9 @@ export function LocalVaultActionNotice({ signing, children }: { signing: LocalVa
     _placeholder: { color: "fg.muted" },
   };
   return (
-    <VStack align="stretch" spacing={2}>
+    <VStack as="section" aria-label="LocalVault signing" align="stretch" spacing={3}
+      bg="surface.raised" border={tokens.borders.thin} borderColor="border.default"
+      borderRadius={tokens.radii.modal} p={4}>
       {children}
       {!signing.envelope ? (
         <Text fontSize="sm" color="fg.secondary">
@@ -39,8 +56,10 @@ export function LocalVaultActionNotice({ signing, children }: { signing: LocalVa
         </Text>
       ) : (
         <>
-          <HStack justify="space-between">
-            <Text fontSize="sm" fontWeight="700">1. Copy this request into LocalVault</Text>
+          <HStack justify="space-between" flexWrap="wrap" rowGap={1}>
+            <Heading {...stepHeadingProps} flex="1 1 13rem" ref={requestHeading} tabIndex={-1} scrollMarginTop={5}>
+              1. Copy this request into LocalVault
+            </Heading>
             <HStack spacing={1}>
               <CopyButton label="Copy LocalVault request" value={signing.envelope} />
               <Button size="xs" variant="ghost" onClick={signing.edit} isDisabled={signing.busy !== null}>
@@ -50,9 +69,9 @@ export function LocalVaultActionNotice({ signing, children }: { signing: LocalVa
           </HStack>
           <Textarea {...fieldProps} value={signing.envelope} isReadOnly rows={3}
             aria-label="LocalVault request" onFocus={(event) => event.target.select()} />
-          <Text fontSize="sm" fontWeight="700">2. Paste the signed response</Text>
-          <Textarea {...fieldProps} value={signing.response} rows={3}
-            placeholder='{"v":1,"id":"…","result":{…}}' aria-label="LocalVault signed response"
+          <Heading {...stepHeadingProps}>2. Paste the signed response</Heading>
+          <Textarea {...fieldProps} value={signing.response} rows={4}
+            placeholder="Paste the response from LocalVault" aria-label="LocalVault signed response"
             isDisabled={signing.busy !== null}
             onChange={(event) => signing.setResponse(event.target.value)} />
         </>
@@ -89,7 +108,7 @@ export function LocalVaultConfirmAction({
   }
   return (
     <Button
-      variant="brand"
+      variant="secondary"
       w="full"
       onClick={() => void signing.submit()}
       isLoading={signing.busy === "submitting"}

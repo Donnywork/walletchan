@@ -34,7 +34,8 @@ test("view-only signing prompts place one shared notice in the action bar", asyn
 
   assert.match(notice, /View-only accounts can't sign/u);
   assert.match(stickyActionBar, /\{notice &&[\s\S]*?\{notice\}[\s\S]*?<Grid/u);
-  assert.match(confirmationScreen, /notice=\{actionNotice\}/u);
+  assert.match(confirmationScreen, /actionDetailsPlacement = "footer"/u);
+  assert.match(confirmationScreen, /notice=\{actionDetailsPlacement === "footer" && actionNotice\}/u);
 
   for (const prompt of [batch, signature, permission]) {
     assert.match(
